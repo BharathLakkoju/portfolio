@@ -20,6 +20,7 @@ export default function BlogManager() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [editing, setEditing] = useState<BlogPost | null>(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const [form, setForm] = useState(EMPTY);
     const [saving, setSaving] = useState(false);
 
@@ -34,13 +35,22 @@ export default function BlogManager() {
 
     useEffect(() => { fetchPosts(); }, []);
 
-    const openNew = () => { setEditing(null); setForm(EMPTY); };
+    const openNew = () => {
+        setEditing(null);
+        setForm(EMPTY);
+        setIsFormOpen(true);
+    };
     const openEdit = (p: BlogPost) => {
         setEditing(p);
         const { id: _id, created_at: _c, updated_at: _u, ...rest } = p;
         setForm(rest);
+        setIsFormOpen(true);
     };
-    const closeForm = () => { setEditing(null); setForm(EMPTY); };
+    const closeForm = () => {
+        setEditing(null);
+        setForm(EMPTY);
+        setIsFormOpen(false);
+    };
 
     const handleSave = async () => {
         setSaving(true);
@@ -63,8 +73,6 @@ export default function BlogManager() {
         if (res.ok) fetchPosts();
         else setError('Delete failed');
     };
-
-    const isFormOpen = editing !== null || (editing === null && form.title !== '');
 
     return (
         <div className="admin-section">

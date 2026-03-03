@@ -19,6 +19,7 @@ export default function ProjectsManager() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [editing, setEditing] = useState<Project | null>(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const [form, setForm] = useState(EMPTY);
     const [tagsText, setTagsText] = useState('');
     const [saving, setSaving] = useState(false);
@@ -38,6 +39,7 @@ export default function ProjectsManager() {
         setEditing(null);
         setForm(EMPTY);
         setTagsText('');
+        setIsFormOpen(true);
     };
 
     const openEdit = (item: Project) => {
@@ -45,12 +47,14 @@ export default function ProjectsManager() {
         const { id: _id, created_at: _c, updated_at: _u, tags, ...rest } = item;
         setForm({ ...rest, tags });
         setTagsText(tags.join(', '));
+        setIsFormOpen(true);
     };
 
     const closeForm = () => {
         setEditing(null);
         setForm(EMPTY);
         setTagsText('');
+        setIsFormOpen(false);
     };
 
     const handleSave = async () => {
@@ -85,8 +89,6 @@ export default function ProjectsManager() {
         if (res.ok) fetchItems();
         else setError('Delete failed');
     };
-
-    const isFormOpen = editing !== null || form.title !== '';
 
     return (
         <div className="admin-section">

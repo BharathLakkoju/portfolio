@@ -17,6 +17,7 @@ export default function ExperienceManager() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [editing, setEditing] = useState<WorkExperience | null>(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const [form, setForm] = useState(EMPTY);
     const [bulletsText, setBulletsText] = useState('');
     const [saving, setSaving] = useState(false);
@@ -36,6 +37,7 @@ export default function ExperienceManager() {
         setEditing(null);
         setForm(EMPTY);
         setBulletsText('');
+        setIsFormOpen(true);
     };
 
     const openEdit = (item: WorkExperience) => {
@@ -43,12 +45,14 @@ export default function ExperienceManager() {
         const { id: _id, created_at: _c, updated_at: _u, bullets, ...rest } = item;
         setForm({ ...rest, bullets });
         setBulletsText(bullets.join('\n'));
+        setIsFormOpen(true);
     };
 
     const closeForm = () => {
         setEditing(null);
         setForm(EMPTY);
         setBulletsText('');
+        setIsFormOpen(false);
     };
 
     const handleSave = async () => {
@@ -83,8 +87,6 @@ export default function ExperienceManager() {
         if (res.ok) fetchItems();
         else setError('Delete failed');
     };
-
-    const isFormOpen = editing !== null || form.role !== '';
 
     return (
         <div className="admin-section">

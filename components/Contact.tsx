@@ -12,11 +12,11 @@ export default function Contact() {
                 within 24 hours.
             </p>
             <div className="contact-links">
-                <a href="mailto:yourmail@email.com" className="contact-link primary">
+                <a href="mailto:lbh.lbharath@gmail.com" className="contact-link primary">
                     ✉ Send Email
                 </a>
                 <a
-                    href="https://linkedin.com"
+                    href="https://linkedin.com/in/bharathlakkoju"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="contact-link"
@@ -24,7 +24,7 @@ export default function Contact() {
                     in LinkedIn
                 </a>
                 <a
-                    href="https://github.com"
+                    href="https://github.com/bharathlakkoju"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="contact-link"

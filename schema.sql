@@ -83,6 +83,17 @@ CREATE TABLE IF NOT EXISTS projects (
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- Add image_path column if it doesn't exist (for existing tables)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'projects' AND column_name = 'image_path'
+  ) THEN
+    ALTER TABLE projects ADD COLUMN image_path TEXT DEFAULT NULL;
+  END IF;
+END $$;
+
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Public can read projects" ON projects;
@@ -139,7 +150,7 @@ BEGIN
 END $$;
 
 -- ══════════════════════════════════════════════════════════════
---  6. Seed — blog_posts (6 posts by Bharath Lakkoju)
+--  7. Seed — blog_posts (6 posts by Bharath Lakkoju)
 --     ON CONFLICT (title) DO NOTHING makes this safe to re-run
 -- ══════════════════════════════════════════════════════════════
 INSERT INTO blog_posts (title, excerpt, content, category, emoji, gradient, read_time, published_at)
@@ -244,7 +255,7 @@ VALUES
 ON CONFLICT (title) DO NOTHING;
 
 -- ══════════════════════════════════════════════════════════════
---  7. Seed — work_experience
+--  8. Seed — work_experience
 -- ══════════════════════════════════════════════════════════════
 INSERT INTO work_experience (role, company, location, period, bullets, display_order)
 SELECT * FROM (VALUES
@@ -268,7 +279,21 @@ SELECT * FROM (VALUES
 WHERE NOT EXISTS (SELECT 1 FROM work_experience LIMIT 1);
 
 -- ══════════════════════════════════════════════════════════════
---  8. Seed — projects
+--  8. Unique constraint on projects.title
+-- ══════════════════════════════════════════════════════════════
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints
+    WHERE constraint_name = 'projects_title_key'
+      AND table_name = 'projects'
+  ) THEN
+    ALTER TABLE projects ADD CONSTRAINT projects_title_key UNIQUE (title);
+  END IF;
+END $$;
+
+-- ══════════════════════════════════════════════════════════════
+--  9. Seed — projects
 -- ══════════════════════════════════════════════════════════════
 INSERT INTO projects (icon, image_path, active, status_label, title, description, tags, display_order)
 VALUES
