@@ -56,6 +56,11 @@ export default function Dashboard({ username }: { username: string }) {
 
             {/* Content */}
             <main className="admin-content">
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                    <button className="btn-outline" onClick={logout} disabled={isPending}>
+                        {isPending ? 'Logging out…' : 'Logout'}
+                    </button>
+                </div>
                 {tab === 'blog' && <BlogManager />}
                 {tab === 'experience' && <ExperienceManager />}
                 {tab === 'projects' && <ProjectsManager />}
